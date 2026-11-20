@@ -3,50 +3,92 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#17130f">
+  <meta name="theme-color" content="#15120f">
+  <meta name="description" content="Rule Avelorn, hear its people, and decide what kind of kingdom will endure.">
   <title>Kingdom's Judgment</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <main id="game">
-    <header class="topbar">
-      <div class="brand">KINGDOM'S JUDGMENT</div>
-      <div class="day-label" id="day-label">Day 1 · Morning</div>
-    </header>
-    <section class="kingdom-status" aria-label="Kingdom resources">
-      <span>Gold: <b id="gold">100</b></span>
-      <span>Food: <b id="food">80</b></span>
-      <span>Stability: <b id="stability">45</b></span>
+  <main id="game" class="game-shell">
+    <section id="title-screen" class="title-screen" aria-labelledby="game-title">
+      <div class="title-ornament" aria-hidden="true"><span></span><b>✦</b><span></span></div>
+      <p class="eyebrow">THE CHRONICLES OF AVELORN · BOOK I</p>
+      <h1 id="game-title">Kingdom's <em>Judgment</em></h1>
+      <p class="title-copy">A crown is not a promise of peace. It is the duty to choose when every choice costs something.</p>
+      <div class="title-rule" aria-hidden="true"></div>
+      <label class="ruler-name-label" for="ruler-name">What shall the realm call its ruler?</label>
+      <input id="ruler-name" class="ruler-name-input" maxlength="24" autocomplete="off" placeholder="Your Grace">
+      <div class="title-actions">
+        <button id="new-game" class="button button-primary">Begin a new reign <span aria-hidden="true">→</span></button>
+        <button id="continue-game" class="button button-secondary" disabled>Continue reign</button>
+      </div>
+      <p id="save-preview" class="save-preview">Avelorn's throne awaits.</p>
+      <p class="title-controls">A quiet, choice-driven kingdom RPG · Keyboard, touch, and mouse controls</p>
     </section>
-    <section class="scene-wrap">
-      <canvas id="scene" aria-label="Side-view throne room"></canvas>
-      <div class="hint" id="hint">Move with WASD or arrow keys. Approach the captain and interact.</div>
-      <div class="touch-controls" aria-label="Movement controls">
-        <button data-move="up" aria-label="Move up">▲</button>
-        <div>
-          <button data-move="left" aria-label="Move left">◀</button>
-          <button data-move="down" aria-label="Move down">▼</button>
-          <button data-move="right" aria-label="Move right">▶</button>
+
+    <section id="play-screen" class="play-screen hidden" aria-label="Kingdom's Judgment">
+      <header class="topbar">
+        <div class="brand-lockup">
+          <span class="brand-sigil" aria-hidden="true">✦</span>
+          <div><div class="brand">KINGDOM'S JUDGMENT</div><div class="realm-name">THE CROWN OF AVELORN</div></div>
         </div>
-      </div>
-      <button class="interact" id="interact">Interact</button>
+        <div class="topbar-right">
+          <div class="day-label"><span class="day-dot" aria-hidden="true"></span><span id="day-label">Day 1 · Morning</span></div>
+          <button id="save-button" class="save-button" title="Save your reign">Save <span aria-hidden="true">◆</span></button>
+        </div>
+      </header>
+
+      <section class="kingdom-status" aria-label="Kingdom resources">
+        <div class="resource"><span class="resource-icon gold-icon" aria-hidden="true">◈</span><div><small>TREASURY</small><b id="gold">100</b><span class="resource-unit">gold</span></div></div>
+        <div class="resource"><span class="resource-icon food-icon" aria-hidden="true">❋</span><div><small>ROYAL STORES</small><b id="food">80</b><span class="resource-unit">rations</span></div></div>
+        <div class="resource"><span class="resource-icon mood-icon" aria-hidden="true">♡</span><div><small>PUBLIC MOOD</small><b id="approval">52</b><span class="resource-unit">of 100</span></div></div>
+        <div class="resource"><span class="resource-icon stability-icon" aria-hidden="true">⚖</span><div><small>REALM STABILITY</small><b id="stability">45</b><span class="resource-unit">of 100</span></div></div>
+      </section>
+
+      <nav class="tabs" aria-label="Kingdom locations and records">
+        <button class="tab active" data-view="throne" aria-current="page"><span aria-hidden="true">♜</span> Throne Room</button>
+        <button class="tab" data-view="capital"><span aria-hidden="true">⌂</span> Capital</button>
+        <button class="tab" data-view="kingdom"><span aria-hidden="true">◈</span> Kingdom</button>
+        <button class="tab" data-view="council"><span aria-hidden="true">♧</span> Council</button>
+      </nav>
+
+      <section id="throne-view" class="throne-view" aria-label="Throne room">
+        <div class="scene-heading">
+          <div><p class="eyebrow">THE ROYAL AUDIENCE</p><h2>The Throne Room</h2></div>
+          <div class="scene-legend"><span><i class="legend-you"></i>You</span><span><i class="legend-court"></i>The court</span><span class="pixel-label">AVELORN · CAPITAL</span></div>
+        </div>
+        <div class="scene-wrap">
+          <canvas id="scene" aria-label="Pixel-art side view of Avelorn's throne room. Walk near a courtier and interact to speak." tabindex="0"></canvas>
+          <div class="scene-vignette" aria-hidden="true"></div>
+          <div class="scene-hint" id="hint"><span class="hint-key">WASD</span> or arrows to walk <span class="hint-separator">·</span> <span class="hint-key">E</span> to speak</div>
+          <div class="touch-controls" aria-label="Movement controls">
+            <button data-move="up" aria-label="Move up">▲</button>
+            <div><button data-move="left" aria-label="Move left">◀</button><button data-move="down" aria-label="Move down">▼</button><button data-move="right" aria-label="Move right">▶</button></div>
+          </div>
+          <button class="interact-button" id="interact"><span aria-hidden="true">✧</span> Speak</button>
+          <div class="scene-caption" id="scene-caption"><span class="caption-mark" aria-hidden="true">✦</span><span>Avelorn waits to learn what kind of ruler you will be.</span></div>
+        </div>
+      </section>
+
+      <section id="panel-view" class="panel-view hidden" aria-live="polite"></section>
+
+      <section class="dialogue hidden" id="dialogue" aria-live="polite" aria-modal="true" role="dialog" aria-labelledby="speaker">
+        <div class="portrait-frame"><div class="portrait-art" id="portrait-art" aria-hidden="true"><span id="portrait-mark">✦</span></div><span class="portrait-ribbon" id="portrait-role">COURT</span></div>
+        <div class="dialogue-content">
+          <div class="dialogue-heading"><div><p class="dialogue-kicker" id="dialogue-kicker">AN AUDIENCE</p><h2 id="speaker"></h2></div><button class="dialogue-close" id="dialogue-close" aria-label="Close dialogue">×</button></div>
+          <p id="dialogue-text"></p>
+          <div id="choices" class="choices"></div>
+        </div>
+      </section>
+
+      <footer class="footer-bar">
+        <p class="footer-note" id="footer-note" aria-live="polite">A new reign begins. The people are watching.</p>
+        <span class="autosave-note" id="save-status">Progress saves in this browser</span>
+      </footer>
     </section>
-    <section class="dialogue hidden" id="dialogue" aria-live="polite">
-      <div class="portrait" aria-hidden="true">🛡️</div>
-      <div class="dialogue-content">
-        <h2 id="speaker">Captain Aldric</h2>
-        <p id="dialogue-text"></p>
-        <div id="choices" class="choices"></div>
-      </div>
-    </section>
-    <nav class="tabs" aria-label="Game sections">
-      <button class="active" data-tab="Throne Room">Throne</button>
-      <button data-tab="Capital">Capital</button>
-      <button data-tab="Kingdom">Kingdom</button>
-      <button data-tab="Council">Council</button>
-    </nav>
-    <p class="footer-note" id="footer-note">Avelorn is waiting for its new ruler.</p>
   </main>
+  <script src="js/content.js"></script>
+  <script src="js/scene.js"></script>
   <script src="js/main.js"></script>
 </body>
 </html>
