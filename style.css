@@ -1,0 +1,21 @@
+:root{color-scheme:dark;--gold:#d9b56c;--panel:#211b17;--line:#65513a;--muted:#b8a58c}
+*{box-sizing:border-box}body{margin:0;background:#100e0c;color:#f3e8d5;font-family:Georgia,serif}
+#game{max-width:1100px;margin:auto;min-height:100vh;padding:14px;display:flex;flex-direction:column;gap:12px}
+.topbar,.kingdom-status,.tabs{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.brand{font-weight:bold;letter-spacing:.16em;color:var(--gold);font-size:clamp(16px,3vw,24px)}
+.day-label{color:var(--muted)}.kingdom-status{background:#211b17;border:1px solid var(--line);padding:10px 14px;border-radius:8px}
+.kingdom-status span{font-size:14px;color:var(--muted)}.kingdom-status b{color:#f5d38c;margin-left:4px}
+.scene-wrap{position:relative;border:2px solid #6d5638;border-radius:8px;overflow:hidden;background:#17120f;min-height:340px}
+#scene{display:block;width:100%;height: min(58vh,520px);min-height:340px;touch-action:none}
+.hint{position:absolute;top:10px;left:12px;right:12px;text-align:center;color:#f2dfbd;text-shadow:0 2px 3px #000;font:13px Arial,sans-serif;pointer-events:none}
+.touch-controls{position:absolute;left:12px;bottom:12px;display:grid;gap:4px}
+.touch-controls>div{display:flex;gap:4px}.touch-controls button,.interact{border:1px solid #a88a5a;background:#29211a;color:#fff1d4;border-radius:8px;min-width:42px;min-height:42px;font-size:17px;touch-action:none;user-select:none;-webkit-user-select:none}
+.interact{position:absolute;right:12px;bottom:12px;padding:0 18px;font: bold 14px Arial,sans-serif}
+.dialogue{display:flex;gap:14px;padding:14px;background:linear-gradient(135deg,#2b2119,#171310);border:1px solid var(--gold);border-radius:8px}
+.dialogue.hidden{display:none}.portrait{width:76px;min-width:76px;height:90px;display:grid;place-items:center;background:#463727;border:2px solid #a88a5a;border-radius:6px;font-size:42px}
+.dialogue-content{flex:1;min-width:0}.dialogue h2{margin:0 0 6px;color:var(--gold);font-size:18px}.dialogue p{margin:0 0 12px;line-height:1.5;color:#eee0c9}
+.choices{display:flex;gap:8px;flex-wrap:wrap}.choices button,.tabs button{background:#30251c;color:#f0dfc2;border:1px solid #806440;border-radius:6px;padding:10px 13px;font:14px Arial,sans-serif}
+.choices button:active,.tabs button:active{background:#59432b}.tabs{justify-content:center}.tabs button.active{border-color:var(--gold);color:var(--gold)}
+.footer-note{text-align:center;color:#9d8a72;font:13px Arial,sans-serif;margin:0 0 8px}
+button{cursor:pointer}button:focus-visible{outline:2px solid #f4d28b;outline-offset:2px}
+@media(max-width:600px){#game{padding:8px}.kingdom-status{justify-content:space-around}.dialogue{gap:9px;padding:10px}.portrait{width:58px;min-width:58px;height:72px;font-size:32px}.choices button{flex:1 1 100%}.scene-wrap,#scene{min-height:360px}.tabs button{padding:9px 10px}}
