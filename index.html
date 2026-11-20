@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#17130f">
+  <title>Kingdom's Judgment</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main id="game">
+    <header class="topbar">
+      <div class="brand">KINGDOM'S JUDGMENT</div>
+      <div class="day-label" id="day-label">Day 1 · Morning</div>
+    </header>
+    <section class="kingdom-status" aria-label="Kingdom resources">
+      <span>Gold: <b id="gold">100</b></span>
+      <span>Food: <b id="food">80</b></span>
+      <span>Stability: <b id="stability">45</b></span>
+    </section>
+    <section class="scene-wrap">
+      <canvas id="scene" aria-label="Side-view throne room"></canvas>
+      <div class="hint" id="hint">Move with WASD or arrow keys. Approach the captain and interact.</div>
+      <div class="touch-controls" aria-label="Movement controls">
+        <button data-move="up" aria-label="Move up">▲</button>
+        <div>
+          <button data-move="left" aria-label="Move left">◀</button>
+          <button data-move="down" aria-label="Move down">▼</button>
+          <button data-move="right" aria-label="Move right">▶</button>
+        </div>
+      </div>
+      <button class="interact" id="interact">Interact</button>
+    </section>
+    <section class="dialogue hidden" id="dialogue" aria-live="polite">
+      <div class="portrait" aria-hidden="true">🛡️</div>
+      <div class="dialogue-content">
+        <h2 id="speaker">Captain Aldric</h2>
+        <p id="dialogue-text"></p>
+        <div id="choices" class="choices"></div>
+      </div>
+    </section>
+    <nav class="tabs" aria-label="Game sections">
+      <button class="active" data-tab="Throne Room">Throne</button>
+      <button data-tab="Capital">Capital</button>
+      <button data-tab="Kingdom">Kingdom</button>
+      <button data-tab="Council">Council</button>
+    </nav>
+    <p class="footer-note" id="footer-note">Avelorn is waiting for its new ruler.</p>
+  </main>
+  <script src="js/main.js"></script>
+</body>
+</html>
