@@ -23,9 +23,11 @@ Then open <http://localhost:8000>.
 
 - New reign and continue-from-save flows, with confirmation before replacing a saved reign.
 - Side-view, canvas-drawn pixel-art throne room and direct ruler movement.
-- Distinct court characters with portraits, short character-specific conversations, and council records.
+- Distinct court characters with portraits, selected PixelQuest-derived royal-court sprites, short character-specific conversations, and council records.
 - One-time eastern-road and Eastmere petitions with different resource, public mood, stability, and relationship outcomes.
 - Capital, kingdom overview, court roster, and a recent-judgment ledger.
 - Responsive touch controls and local browser persistence.
+
+The selected ruler, guard, adviser, treasurer, and petitioner sprites are credited in [`assets/royal-court/ATTRIBUTION.md`](assets/royal-court/ATTRIBUTION.md); the guard sprite’s license is included beside it.
 
 The next development milestone is a clear, player-controlled day-advance loop that updates income, food, construction, and new events without advancing time unexpectedly.
