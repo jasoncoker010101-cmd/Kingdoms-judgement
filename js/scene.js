@@ -1,6 +1,29 @@
 (() => {
   const clamp = (n, low, high) => Math.max(low, Math.min(high, n));
 
+  const CHARACTER_ART = {
+    seraphine: { src: "assets/royal-court/advisor.png", frameWidth: 48, frameHeight: 56, frameCount: 1, width: 72, height: 84 },
+    aldric: { src: "assets/royal-court/guard-idle.png", frameWidth: 128, frameHeight: 64, frameCount: 2, frameDuration: 620, width: 172, height: 86 },
+    elowen: { src: "assets/royal-court/treasurer.png", frameWidth: 48, frameHeight: 56, frameCount: 1, width: 72, height: 84 },
+    mara: { src: "assets/royal-court/petitioner.png", frameWidth: 48, frameHeight: 56, frameCount: 1, width: 72, height: 84 }
+  };
+  const RULER_ART = {
+    idle: { src: "assets/royal-court/ruler-idle.png", frameWidth: 128, frameHeight: 96, frameCount: 4, frameDuration: 430 },
+    walk: { src: "assets/royal-court/ruler-run.png", frameWidth: 128, frameHeight: 96, frameCount: 12, frameDuration: 85 },
+    width: 192, height: 144, crown: true
+  };
+  const spriteCache = new Map();
+
+  function getSprite(src) {
+    if (!spriteCache.has(src)) {
+      const image = new Image();
+      image.src = src;
+      spriteCache.set(src, image);
+    }
+    const image = spriteCache.get(src);
+    return image.complete && image.naturalWidth ? image : null;
+  }
+
   function drawScene(canvas, state, now) {
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
@@ -108,11 +131,12 @@
 
     const nearby = closestCharacter(state.player, window.GAME_CONTENT.characters, w, h, 0.095);
     for (const [id, person] of Object.entries(window.GAME_CONTENT.characters)) {
-      drawPerson(ctx, person.x * w, person.y * h, person, id === nearby?.id, id === "ruler", now);
+      drawPerson(ctx, person.x * w, person.y * h, person, id === nearby?.id, false, now, CHARACTER_ART[id]);
     }
+    const rulerMoving = Object.values(state.moving || {}).some(Boolean);
     drawPerson(ctx, state.player.x * w, state.player.y * h, {
       sprite: "#8c3038", hair: "#3d2722", skin: "#dfb38a", accent: "#e1c477", mark: "♛"
-    }, false, true, now);
+    }, false, true, now, RULER_ART, rulerMoving);
 
     if (nearby) {
       ctx.fillStyle = "#f2d99f"; ctx.font = `bold ${Math.max(11, w * .016)}px Arial`; ctx.textAlign = "center";
@@ -136,7 +160,7 @@
     return winner;
   }
 
-  function drawPerson(ctx, x, y, person, highlighted, isPlayer, now) {
+  function drawPerson(ctx, x, y, person, highlighted, isPlayer, now, art = null, moving = false) {
     const scale = Math.max(0.72, Math.min(1.35, ctx.canvas.clientWidth / 720));
     const unit = Math.max(2, Math.round(3 * scale));
     const bob = isPlayer ? Math.sin(now / 150) * 1.5 * scale : Math.sin(now / 260 + x) * 0.7 * scale;
@@ -144,7 +168,25 @@
     ctx.fillStyle = "rgba(0,0,0,.34)"; ctx.beginPath(); ctx.ellipse(x, y + 1, 14 * scale, 4 * scale, 0, 0, Math.PI * 2); ctx.fill();
     if (highlighted) {
       ctx.strokeStyle = "rgba(239,204,126,.70)"; ctx.lineWidth = 2;
-      ctx.beginPath(); ctx.ellipse(x, y - 16 * scale, 18 * scale, 32 * scale, 0, 0, Math.PI * 2); ctx.stroke();
+      const highlightHeight = art ? art.height * scale * 0.52 : 32 * scale;
+      const highlightWidth = art ? Math.max(18 * scale, art.width * scale * 0.18) : 18 * scale;
+      ctx.beginPath(); ctx.ellipse(x, y - highlightHeight * 0.55, highlightWidth, highlightHeight, 0, 0, Math.PI * 2); ctx.stroke();
+    }
+    if (art) {
+      const sheet = art.idle ? (moving ? art.walk : art.idle) : art;
+      const image = getSprite(sheet.src);
+      if (image) {
+        const frames = Math.max(1, sheet.frameCount || 1);
+        const frame = Math.floor(now / (sheet.frameDuration || 500)) % frames;
+        const sx = frame * sheet.frameWidth;
+        const sy = (sheet.row || 0) * sheet.frameHeight;
+        if (sx + sheet.frameWidth <= image.naturalWidth && sy + sheet.frameHeight <= image.naturalHeight) {
+          const width = art.width * scale, height = art.height * scale;
+          ctx.drawImage(image, sx, sy, sheet.frameWidth, sheet.frameHeight, x - width / 2, y - height, width, height);
+          if (art.crown) drawRoyalCrown(ctx, x, y - height * 0.50, scale);
+          return;
+        }
+      }
     }
     // Shadow, boots, robe, shoulders, neck and face are drawn in crisp pixel blocks.
     ctx.fillStyle = "#211916"; ctx.fillRect(x - 10 * scale, y - 8 * scale, 7 * scale, 10 * scale); ctx.fillRect(x + 3 * scale, y - 8 * scale, 7 * scale, 10 * scale);
@@ -159,6 +201,19 @@
       ctx.fillStyle = "#e0c47c"; ctx.fillRect(x - 8 * scale, y - 60 * scale, 16 * scale, 3 * scale);
       ctx.fillRect(x - 5 * scale, y - 65 * scale, 3 * scale, 6 * scale); ctx.fillRect(x + 2 * scale, y - 65 * scale, 3 * scale, 6 * scale);
     }
+  }
+
+  function drawRoyalCrown(ctx, x, top, scale) {
+    const unit = Math.max(1.5, scale * 2);
+    ctx.fillStyle = "#78552e";
+    ctx.fillRect(x - 8 * unit, top + 5 * unit, 16 * unit, 3 * unit);
+    ctx.fillStyle = "#d8b65d";
+    ctx.fillRect(x - 7 * unit, top + 3 * unit, 14 * unit, 4 * unit);
+    ctx.fillRect(x - 7 * unit, top, 3 * unit, 5 * unit);
+    ctx.fillRect(x - 1.5 * unit, top - 2 * unit, 3 * unit, 5 * unit);
+    ctx.fillRect(x + 4 * unit, top, 3 * unit, 5 * unit);
+    ctx.fillStyle = "#f3e0a1";
+    ctx.fillRect(x - unit, top + 5 * unit, 2 * unit, 2 * unit);
   }
 
   window.GAME_SCENE = { drawScene, closestCharacter };
